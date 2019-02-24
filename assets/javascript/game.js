@@ -24,12 +24,12 @@ var gameMortalKombat = {
     ,hasSelectedSecondOpponent : false
     ,hasSelectedThirdtOpponent : false
     ,characters : {
-        "Johnny_Cage" : new GameCharacter("Johnny_Cage",15),
-        "Liu"         : new GameCharacter("Liu",20),
-        "Sonya"       : new GameCharacter("Sonya", 12),
-        "Shang_Tsung" : new GameCharacter("Shang_Tsung", 25),
+        "Johnny" : new GameCharacter("Johnny",15),
+        "Liu"    : new GameCharacter("Liu",20),
+        "Sonya"  : new GameCharacter("Sonya", 12),
+        "Shang"  : new GameCharacter("Shang", 25),
     }
-    ,getWhoAreTheCharacters: function() {
+    ,getNameOfCharacters: function() {
         return this.characters;
     }
     ,getWhoWasClicked : function(){
@@ -129,7 +129,7 @@ var sounds = {
 $(document).ready(function(){
     //setup the game
     drawTheCharacters();
-    //sounds.toggleThemeSong();
+    sounds.toggleThemeSong();
 
     $(".speaker").on("click", function(){
         sounds.toggleThemeSong();
@@ -193,17 +193,25 @@ function main() {
 function selectYourCharacter() {
     if(debug){console.log("function: selectYourCharacter");}
 
-    gameMortalKombat.setTheChosenCharacter(gameMortalKombat.getWhoWasClicked());
+    //set the first character to be clicked as the CHOSENONE
+    var character = gameMortalKombat.getWhoWasClicked();
+    gameMortalKombat.setTheChosenCharacter(character);
+    $("#" + character).addClass("hero");
     gameMortalKombat.setNextStage();
 
     var myCharacter = gameMortalKombat.getWhoIsTheChosenCharacter();
-    //move your character into position to fight - for now just change the border 
-    $("#" + myCharacter).css({"border":"5px solid blue","border-radius":"30px"}); 
-    //the rest move into a corner
-    
+    $("#" + myCharacter).css({"border":"5px solid blue","border-radius":"50px"}); 
 
+    //have characters line up on the right
     $("#arena").removeClass("arena_0");
     $("#arena").addClass("arena_1");
+
+
+    //move your character into position to fight - for now just change the border 
+    //the rest move into a corner
+    
+    
+
     
  
 }
@@ -247,21 +255,38 @@ function gameOVER(){
 }
 
 function drawTheCharacters() {
-    
-    //convert the character object into an array to do forEach
-    var arrayOfCharactersNames  = Object.keys(gameMortalKombat.getWhoAreTheCharacters());
 
+    //convert the character object into an array to do forEach
+    var arrayOfCharactersNames  = Object.keys(gameMortalKombat.getNameOfCharacters());
+    if(debug){console.log(arrayOfCharactersNames);}
     arrayOfCharactersNames.forEach(function(character){
         if(debug){console.log(character);}
         
+        //create a "card" for each character
+        var card = $("<div>");
+        card.addClass("characters " + character);
+        card
+
+        //add an img and append it to the card
         var name = character;
-        var character = $("<img>");
-        character.addClass("characters");
-        character.attr({
-            "id": name,
-            "alt": name
+        var image = $("<img>");
+        var imageSrc = `../assets/images/${name}.jpg`
+        if(debug){console.log(imageSrc);}
+        image.attr({
+            "src": imageSrc,
+            "alt": name,
         });
-        character.css({'width':'100px',"height":"100px","margin":"20px", "border":"1px solid red","color":"white"});
-        $("#arena").append(character);
+        image.addClass("image");
+        card.append(image);
+
+        var title = $("<h3 class='white'>").text(character);
+
+        card.append(title);
+
+        $("#arena").append(card);
+
     });
 }
+
+
+//image.css({'width':'150px',"height":"150px","margin":"20px", "border":"1px solid red","color":"white"});
