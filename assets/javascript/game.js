@@ -1,10 +1,11 @@
 'use strict'
 var debug = true;
 
-function GameCharacter(name, damage) {
+function GameCharacter(name, attackPower,counterAttackPower) {
     this.name = name;
     this.HP = 150;
-    this.damage = damage;
+    this.attackPower = attackPower;
+    this.counterAttackPower = counterAttackPower;
     this.hasDied = false;
     this.chosenOne = false;
 }
@@ -15,15 +16,18 @@ var gameMortalKombat = {
     ,chosenCharacter : ""
     ,chosenOpponent : ""
     ,numberOfStrikes : 0
-    ,strikeMultiplier : 9
     ,challengeWinner : ""
     ,isChallangeOver : false
     ,gameOver : false
+    ,hasSelectedACharacter     : false
+    ,hasSelectedFirstOpponent  : false
+    ,hasSelectedSecondOpponent : false
+    ,hasSelectedThirdtOpponent : false
     ,characters : {
-        "Johnny_Cage" : new GameCharacter("Johnny_Cage",20),
-        "Liu"         : new GameCharacter("Liu",50),
-        "Sonya"       : new GameCharacter("Sonya", 15),
-        "Shang_Tsung" : new GameCharacter("Shang_Tsung", 75),
+        "Johnny_Cage" : new GameCharacter("Johnny_Cage",15),
+        "Liu"         : new GameCharacter("Liu",20),
+        "Sonya"       : new GameCharacter("Sonya", 12),
+        "Shang_Tsung" : new GameCharacter("Shang_Tsung", 25),
     }
     ,getWhoAreTheCharacters: function() {
         return this.characters;
@@ -68,21 +72,21 @@ var gameMortalKombat = {
         
         this.numberOfStrikes++;
         var yourHP = this.characters[this.chosenCharacter].HP;
-        var yourDamages = this.numberOfStrikes * this.strikeMultiplier;
+        var yourAttackPower = this.numberOfStrikes * this.characters[this.chosenCharacter].attackPower;
         var opponentHP = this.characters[this.chosenOpponent].HP;
-        var opponentDamages = this.characters[this.chosenOpponent].damage;
-        if(debug) {console.log(yourHP, " ", yourDamages, " ", opponentHP, " ", opponentDamages);}
+        var opponentAttackPower = this.characters[this.chosenOpponent].attackPower;
+        if(debug) {console.log(yourHP, " ", yourAttackPower, " ", opponentHP, " ", opponentAttackPower);}
 
         //calculate your remaining HP
-        yourHP = yourHP - opponentDamages;
-        opponentHP = opponentHP - yourDamages;
+        yourHP = yourHP - opponentAttackPower;
+        opponentHP = opponentHP - yourAttackPower;
         if(debug) {console.log("yourHP ", yourHP, "opponentHP: ", opponentHP);}
 
         //save HP 
         this.characters[this.chosenCharacter].HP = yourHP;
         this.characters[this.chosenOpponent].HP  = opponentHP;
 
-        //check if any character has died, meaning HP <=0
+        //check if any character has died, meaning HP <= 0
         if(yourHP<=0){
             this.characters[this.chosenCharacter].hasDied = true;
             this.isChallangeOver = true ;
@@ -92,11 +96,13 @@ var gameMortalKombat = {
         if(opponentHP<=0){
             this.characters[this.chosenOpponent].hasDied = true;
             this.isChallangeOver = true ;
+            buryTheDead();
             if(debug){console.log("WELL DONE, YOUR OPPONENT LOST! ARE YOU STILL ALIVE?");}
         }
         //if you are still alive and opponent has lost, set the "challengeWinner" and "isChallengeOver"
         if((this.characters[this.chosenOpponent].hasDied) && (!this.characters[this.chosenCharacter].hasDied)) {
             this.challengeWinner = this.chosenCharacter;
+            this.setNextStage();
         }
     }
 };
@@ -143,20 +149,46 @@ function main() {
     'use strict'
     //make a sound when a character is clicked
 
+    // check if the game is over
+    if(gameMortalKombat.gameOver) {
+        gameOVER();
+        return false;
+    }
+
     var stage = gameMortalKombat.getWhatIsTheStage();
-    //stage = 1 - pick the character
+    //stage 1 - pick the character
     if(stage===1){
         selectYourCharacter();
     
-        //stage = 2 - pick you opponent
+    //stage 2 - pick you opponent
     } else if (stage===2) {
         selectYourOpponent();
     
-        //stage = 3 - fight you 1st opponent
-    }  else if(stage==3) {
+    //stage 3 - fight you 1st opponent
+    } else if(stage===3) {
+        fight();
+   
+    //stage 4 - pick 2nd opponent 
+    } else if(stage===4) {
+        selectYourOpponent();
+
+    //stage 5 - fight your 2nd oponent
+    } else if(stage===5) {
+        fight();
+    
+    //stage 6 - pick your 3rd oponent
+    } else if(stage===6) {
+        selectYourOpponent();
+
+    //stage 7 - fight your 3rd oponent
+    } else if(stage===7) {
         fight();
     }
+
 }
+
+    
+
 
 function selectYourCharacter() {
     if(debug){console.log("function: selectYourCharacter");}
@@ -205,9 +237,14 @@ function fight(){
 }
 
 function buryTheDead(name) {
-
+    $("#" + gameMortalKombat.chosenOpponent).hide();
 }
 
+function gameOVER(){
+    if(debug){console.log("function: gameOVER")}
+    //state on screen if the player lost
+    
+}
 
 function drawTheCharacters() {
     
