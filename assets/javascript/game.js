@@ -144,7 +144,6 @@ $(document).ready(function(){
             moveCharacterToTheRightSide();
             $("#instruction1").addClass("hidden");
             $("#instruction2").removeClass("hidden");
-            $("#fight").removeClass("hidden");
 
         //player selects an opponent
         } else if(!gameMortalKombat.hasSelectedOpponent) {
@@ -156,6 +155,7 @@ $(document).ready(function(){
             gameMortalKombat.hasSelectedOpponent = true;
             selectYourOpponent();
             $("#instruction2").addClass("hidden");
+            $("#fight").removeClass("hidden");
 
         } else {
             //error?
@@ -163,7 +163,60 @@ $(document).ready(function(){
         }
     });
 
+    $("#fight").on("click", function(){
+        if(debug){console.log("EVENT #fight: ");}
+        kombat();
+    });
+
 });
+
+function kombat() {
+    'use strict'
+    var you = gameMortalKombat.chosenCharacter;
+    var villain = gameMortalKombat.chosenOpponent;
+    if(debug){console.log("function: kombat", you, " VS ", villain);}
+
+    //get your player's stats
+    var YourHP = $("#" + you).attr("hp");
+    var YourAttackPower = $("#" + you).attr("attackPower");
+    var YourCounterAttackPower = $("#" + you).attr("counterAttackPower");
+    if(debug){console.log("Before ", YourHP, " ",YourAttackPower, " ", YourCounterAttackPower);}
+    
+    //get your opponent's stats
+    var VillainHP = $("#" + villain).attr("hp");
+    var VillainAttackPower = $("#" + villain).attr("attackPower");
+    var VillainCounterAttackPower = $("#" + villain).attr("counterAttackPower");
+    if(debug){console.log("Before ",VillainHP, " ",VillainAttackPower, " ", VillainCounterAttackPower);}
+    
+    gameMortalKombat.numberOfStrikes++;
+
+    //reduce the opponent's HP by (YourAttackPower * #strikes from)
+    var totalAttackPower = parseInt(YourAttackPower) * parseInt(gameMortalKombat.numberOfStrikes);
+    VillainHP = parseInt(VillainHP) - parseInt(totalAttackPower);
+    $("#" + villain).attr("hp", VillainHP)
+
+    //reduce the hero's HP by the villain's CounterAttackPower only
+    YourHP = parseInt(YourHP) - parseInt(VillainCounterAttackPower);
+    $("#" + you).attr("hp", YourHP);
+
+    if(debug){console.log("After ", YourHP, " ",YourAttackPower, " ", YourCounterAttackPower);}
+    if(debug){console.log("After ",VillainHP, " ",VillainAttackPower, " ", VillainCounterAttackPower);}
+
+    //check if anyone has won
+    //You won
+    if(YourHP > 0 && VillainHP <= 0) {
+        if(debug){console.log("YOU WON THIS ROUND");}
+        buryTheDead(villain);
+        gameMortalKombat.hasSelectedOpponent = false;
+        $("#instruction2").removeClass("hidden");
+        $("#fight").addClass("hidden");
+    //You lost      
+    } else if (YourHP < 0) {
+        if(debug){console.log("YOU LOST");}
+        //set some flag
+    }
+
+}
 
 
 function selectYourCharacter(character) {
@@ -254,21 +307,6 @@ function main() {
     }
 
     var stage = gameMortalKombat.getWhatIsTheStage();
-}
-
-
-function fight(){
-    if(debug){console.log("function:fight ");}
-    
-    //check that the you striked the CURRENT opponent
-    if(gameMortalKombat.getWhoWasClicked()===gameMortalKombat.getTheOpponent()){
-        if(debug){console.log("You just striked ", gameMortalKombat.getTheOpponent());}
-        gameMortalKombat.strike();
-    }
-    //check if either character has died
-     if(gameMortalKombat.chosenCharacter){
-
-     }
 }
 
 function buryTheDead(name) {
