@@ -272,7 +272,7 @@ function drawTheCharacters() {
         //add an img and append it to the card
         var name = character;
         var image = $("<img>");
-        var imageSrc = `../assets/images/${name}.jpg`
+        var imageSrc = `./assets/images/${name}.jpg`
         if(debug){console.log(imageSrc);}
         image.attr({
             "src": imageSrc,
