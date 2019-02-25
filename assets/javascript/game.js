@@ -11,21 +11,18 @@ function GameCharacter(name, attackPower,counterAttackPower) {
 }
 
 var gameMortalKombat = {
-    stage : 1
-    ,characterThatWasRecentlyClicked : ""
+    characterThatWasRecentlyClicked : ""
     ,chosenCharacter : ""
     ,chosenOpponent : ""
     ,numberOfStrikes : 0
-    ,challengeWinner : ""
-    ,isChallangeOver : false
-    ,gameOver : false
-    ,hasSelectedACharacter     : false
+    ,numberOfWins : 0
+    ,hasSelectedACharacter: false
     ,hasSelectedOpponent  : false
     ,characters : {
-        "Johnny" : new GameCharacter("Johnny",15, 17),
+        "Johnny" : new GameCharacter("Johnny",21, 17),
         "Liu"    : new GameCharacter("Liu", 20, 18 ),
-        "Sonya"  : new GameCharacter("Sonya", 9, 12),
-        "Shang"  : new GameCharacter("Shang", 22, 20),
+        "Sonya"  : new GameCharacter("Sonya", 19, 15),
+        "Shang"  : new GameCharacter("Shang", 20, 20),
     }
     ,getNameOfCharacters: function() {
         return this.characters;
@@ -45,59 +42,6 @@ var gameMortalKombat = {
     ,getWhoIsTheChosenCharacter: function() {
         if(debug){console.log("getWhoIsTheChosenCharacter:", this.chosenCharacter);}
         return this.chosenCharacter;
-    }
-    ,setTheOpponent : function(character){
-        this.chosenOpponent = character;
-        if(debug){console.log("setTheOpponent:", this.chosenOpponent);}
-    }
-    ,getTheOpponent : function(){
-        return this.chosenOpponent;
-        if(debug){console.log("getTheOpponent:", this.chosenOpponent);}
-    }
-    ,setNextStage: function(){
-        this.stage++;
-        if(debug){console.log("setNextStage: ", this.stage);}
-    }
-    ,getWhatIsTheStage : function () {
-        return this.stage;
-    }
-    ,strike: function() {
-        if(debug) {console.log("gameMortalKombat: strike");}
-        
-        this.numberOfStrikes++;
-        var yourHP = this.characters[this.chosenCharacter].HP;
-        var yourAttackPower = this.numberOfStrikes * this.characters[this.chosenCharacter].attackPower;
-        var opponentHP = this.characters[this.chosenOpponent].HP;
-        var opponentAttackPower = this.characters[this.chosenOpponent].attackPower;
-        if(debug) {console.log(yourHP, " ", yourAttackPower, " ", opponentHP, " ", opponentAttackPower);}
-
-        //calculate your remaining HP
-        yourHP = yourHP - opponentAttackPower;
-        opponentHP = opponentHP - yourAttackPower;
-        if(debug) {console.log("yourHP ", yourHP, "opponentHP: ", opponentHP);}
-
-        //save HP 
-        this.characters[this.chosenCharacter].HP = yourHP;
-        this.characters[this.chosenOpponent].HP  = opponentHP;
-
-        //check if any character has died, meaning HP <= 0
-        if(yourHP<=0){
-            this.characters[this.chosenCharacter].hasDied = true;
-            this.isChallangeOver = true ;
-            this.gameOver = true;
-            if(debug){console.log("GAMEOVER!");}
-        }
-        if(opponentHP<=0){
-            this.characters[this.chosenOpponent].hasDied = true;
-            this.isChallangeOver = true ;
-            buryTheDead();
-            if(debug){console.log("WELL DONE, YOUR OPPONENT LOST! ARE YOU STILL ALIVE?");}
-        }
-        //if you are still alive and opponent has lost, set the "challengeWinner" and "isChallengeOver"
-        if((this.characters[this.chosenOpponent].hasDied) && (!this.characters[this.chosenCharacter].hasDied)) {
-            this.challengeWinner = this.chosenCharacter;
-            this.setNextStage();
-        }
     }
 };
 
@@ -119,9 +63,7 @@ var sounds = {
     }
 };
 
-
 $(document).ready(function(){
-    //setup the game
     //sounds.toggleThemeSong();
 
     drawTheCharacters();
@@ -141,7 +83,7 @@ $(document).ready(function(){
         if(!gameMortalKombat.hasSelectedACharacter) {
             gameMortalKombat.hasSelectedACharacter = true;
             selectYourCharacter(character);
-            moveCharacterToTheRightSide();
+            moveCharactersToTheRightSide();
             $("#instruction1").addClass("hidden");
             $("#instruction2").removeClass("hidden");
 
@@ -153,7 +95,7 @@ $(document).ready(function(){
             }
             gameMortalKombat.getWhoWasClicked
             gameMortalKombat.hasSelectedOpponent = true;
-            selectYourOpponent();
+            selectYourOpponent(character);
             $("#instruction2").addClass("hidden");
             $("#fight").removeClass("hidden");
 
@@ -206,7 +148,7 @@ function kombat() {
     //You won
     if(YourHP > 0 && VillainHP <= 0) {
         if(debug){console.log("YOU WON THIS ROUND");}
-        buryTheDead(villain);
+        buryTheDead();
         gameMortalKombat.hasSelectedOpponent = false;
         $("#instruction2").removeClass("hidden");
         $("#fight").addClass("hidden");
@@ -215,34 +157,34 @@ function kombat() {
         if(debug){console.log("YOU LOST");}
         //set some flag
     }
-
 }
-
 
 function selectYourCharacter(character) {
     if(debug){console.log("function: selectYourCharacter");}
-    gameMortalKombat.setTheChosenCharacter(character);
+    gameMortalKombat.chosenCharacter = character;
 
     //.hero class positions the character
     $("#" + character).addClass("hero");
 }
 
-function moveCharacterToTheRightSide() {
+function moveCharactersToTheRightSide() {
     $("#arena").removeClass("arena_0");
     $("#arena").addClass("arena_1");
 }
 
-function selectYourOpponent() {
+function selectYourOpponent(character) {
     if(debug){console.log("function:select your opponent");}
     
-    var theOpponent = gameMortalKombat.getWhoWasClicked();
-    gameMortalKombat.setTheOpponent(theOpponent);
+    gameMortalKombat.chosenOpponent = character;
 
     //move the selected opponent into position to fight and flip image horizontally
-    var opp = "#" + theOpponent;
+    var opp = "#" + character;
     $(opp).addClass("opponent");
-    $(opp + " img").addClass("opponent-flip");
-    
+    $(opp + " img").addClass("opponent-flip");  
+}
+
+function buryTheDead() {
+    $("#" + gameMortalKombat.chosenOpponent).hide();
 }
 
 function drawTheCharacters() {
@@ -286,36 +228,5 @@ function drawTheCharacters() {
         card.append(title);
 
         $("#arena").append(card);
-
     });
 }
-
-
-
-
-
-// -------------------------------------------------------------------------------
-
-function main() {
-    'use strict'
-    //make a sound when a character is clicked
-
-    // check if the game is over
-    if(gameMortalKombat.gameOver) {
-        gameOVER();
-        return false;
-    }
-
-    var stage = gameMortalKombat.getWhatIsTheStage();
-}
-
-function buryTheDead(name) {
-    $("#" + gameMortalKombat.chosenOpponent).hide();
-}
-
-function gameOVER(){
-    if(debug){console.log("function: gameOVER")}
-    //state on screen if the player lost
-    
-}
-
