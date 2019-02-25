@@ -18,6 +18,7 @@ var gameMortalKombat = {
     ,numberOfWins : 0
     ,hasSelectedACharacter: false
     ,hasSelectedOpponent  : false
+    ,gameOver: false
     ,characters : {
         "Johnny" : new GameCharacter("Johnny",21, 17),
         "Liu"    : new GameCharacter("Liu", 20, 18 ),
@@ -150,12 +151,23 @@ function kombat() {
         if(debug){console.log("YOU WON THIS ROUND");}
         buryTheDead();
         gameMortalKombat.hasSelectedOpponent = false;
-        $("#instruction2").removeClass("hidden");
         $("#fight").addClass("hidden");
+        
+        //increment the numberof wins then check if all 3 opponents have been defeated
+        gameMortalKombat.numberOfWins++;
+        if(gameMortalKombat.numberOfWins===3){
+            gameMortalKombat.gameOver = true;
+            console.log("CONGRATULATIONS YOU DEFEATED ALL ENEMIES!");
+            //play music
+            return false;
+        } else {
+            $("#instruction2").removeClass("hidden");
+        }
     //You lost      
     } else if (YourHP < 0) {
         if(debug){console.log("YOU LOST");}
         //set some flag
+
     }
 }
 
