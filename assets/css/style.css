@@ -38,6 +38,7 @@
 }
 .characters:hover {
     cursor: pointer;
+    outline: none;
 }
 .hero {
     position: absolute;
@@ -78,7 +79,17 @@
 
 #fight {
     font-size: 40px;
+    line-height: 60px;
+    background-color: red;
     position: absolute;
     top: 275px;
     left: 420px;
+    border-radius: 20px;
+    outline: none;
+
+}
+
+#fight:hover {
+    cursor: pointer;
+    outline: none;
 }
