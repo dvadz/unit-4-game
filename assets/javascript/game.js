@@ -20,10 +20,10 @@ var gameMortalKombat = {
     ,hasSelectedOpponent  : false
     ,gameOver: false
     ,characters : {
-        "Johnny" : new GameCharacter("Johnny",21, 17),
-        "Liu"    : new GameCharacter("Liu", 20, 18 ),
-        "Sonya"  : new GameCharacter("Sonya", 19, 15),
-        "Shang"  : new GameCharacter("Shang", 20, 20),
+        "Johnny" : new GameCharacter("Johnny", 15, 16),
+        "Liu"    : new GameCharacter("Liu"   , 18, 18),
+        "Sonya"  : new GameCharacter("Sonya" , 12, 15),
+        "Shang"  : new GameCharacter("Shang" , 20, 25),
     }
     ,getNameOfCharacters: function() {
         return this.characters;
@@ -133,14 +133,16 @@ function kombat() {
     
     gameMortalKombat.numberOfStrikes++;
 
-    //reduce the opponent's HP by (YourAttackPower * #strikes from)
+    //reduce the opponent's HP by (YourAttackPower * #strikes)
     var totalAttackPower = parseInt(YourAttackPower) * parseInt(gameMortalKombat.numberOfStrikes);
     VillainHP = parseInt(VillainHP) - parseInt(totalAttackPower);
-    $("#" + villain).attr("hp", VillainHP)
+    $(`#${villain}`).attr("hp", VillainHP)
+    $(`#${villain} span#displayHP`).text(VillainHP);
 
-    //reduce the hero's HP by the villain's CounterAttackPower only
+    //reduce the hero's HP by the villain's CounterAttackPower alone
     YourHP = parseInt(YourHP) - parseInt(VillainCounterAttackPower);
     $("#" + you).attr("hp", YourHP);
+    $(`#${you} span#displayHP`).text(YourHP);
 
     if(debug){console.log("After ", YourHP, " ",YourAttackPower, " ", YourCounterAttackPower);}
     if(debug){console.log("After ",VillainHP, " ",VillainAttackPower, " ", VillainCounterAttackPower);}
@@ -161,12 +163,16 @@ function kombat() {
             //play music
             return false;
         } else {
+            //display instruction to pick another opponent
             $("#instruction2").removeClass("hidden");
         }
     //You lost         
     } else if (YourHP < 0) {
         if(debug){console.log("YOU LOST");}
-        //set some flag
+        //set some flagß
+        gameMortalKombat.gameOver = true;
+        $("#fight").addClass("hidden");
+
 
     }
 }

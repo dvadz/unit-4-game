@@ -71,7 +71,7 @@ div {                           /* Make the elements unselectable */
 }
 .card-caption{
     font-size: 20px;
-    color: rgb(150, 141, 141);
+    color: rgb(216, 199, 199);
     display: flex;
     justify-content: space-between;
 }
