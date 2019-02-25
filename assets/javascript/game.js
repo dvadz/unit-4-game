@@ -108,7 +108,7 @@ var gameMortalKombat = {
 };
 
 var sounds = {
-     themeSong : new Audio("../assets/sounds/Mortal_Kombat_theme.mp3")
+     themeSong : new Audio("./assets/sounds/Mortal_Kombat_theme.mp3")
      ,isthemeSongPlaying : false
      ,toggleThemeSong: function() {
         if(this.isthemeSongPlaying) {
