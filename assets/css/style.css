@@ -75,3 +75,10 @@
 .hidden {
     display: none;
 }
+
+#fight {
+    font-size: 40px;
+    position: absolute;
+    top: 275px;
+    left: 420px;
+}
