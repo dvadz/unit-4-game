@@ -24,10 +24,10 @@ var gameMortalKombat = {
     ,hasSelectedSecondOpponent : false
     ,hasSelectedThirdtOpponent : false
     ,characters : {
-        "Johnny" : new GameCharacter("Johnny",15),
-        "Liu"    : new GameCharacter("Liu",20),
-        "Sonya"  : new GameCharacter("Sonya", 12),
-        "Shang"  : new GameCharacter("Shang", 25),
+        "Johnny" : new GameCharacter("Johnny",15, 17),
+        "Liu"    : new GameCharacter("Liu", 20, 18 ),
+        "Sonya"  : new GameCharacter("Sonya", 9, 12),
+        "Shang"  : new GameCharacter("Shang", 22, 20),
     }
     ,getNameOfCharacters: function() {
         return this.characters;
@@ -128,8 +128,9 @@ var sounds = {
 
 $(document).ready(function(){
     //setup the game
+    //sounds.toggleThemeSong();
+
     drawTheCharacters();
-    sounds.toggleThemeSong();
 
     $(".speaker").on("click", function(){
         sounds.toggleThemeSong();
@@ -138,10 +139,15 @@ $(document).ready(function(){
 
     $(".characters").on("click", function(){
         //identify which character was clicked and save it
-        if(debug){console.log(this);}
+        if(debug){"Character Click ",console.log(this.id);}
         gameMortalKombat.setWhoWasClicked(this.id);
-        console.log("CLICKED ON THE SCREEN", this.id);
+
         main();
+    });
+
+    $(".opponent").on("click", function(){
+        if(debug){"Opponent Click ",console.log(this.id);}
+        
     });
 
 });
@@ -157,35 +163,36 @@ function main() {
     }
 
     var stage = gameMortalKombat.getWhatIsTheStage();
-    //stage 1 - pick the character
-    if(stage===1){
-        selectYourCharacter();
-        $("#instruction1").addClass("hidden");
+
+    // //stage 1 - pick the character
+    // if(stage===1){
+    //     selectYourCharacter();
+    //     $("#instruction1").addClass("hidden");
     
-    //stage 2 - pick you opponent
-    } else if (stage===2) {
-        selectYourOpponent();
+    // //stage 2 - pick you opponent
+    // } else if (stage===2) {
+    //     selectYourOpponent();
     
-    //stage 3 - fight you 1st opponent
-    } else if(stage===3) {
-        fight();
+    // //stage 3 - fight you 1st opponent
+    // } else if(stage===3) {
+    //     fight();
    
-    //stage 4 - pick 2nd opponent 
-    } else if(stage===4) {
-        selectYourOpponent();
+    // //stage 4 - pick 2nd opponent 
+    // } else if(stage===4) {
+    //     selectYourOpponent();
 
-    //stage 5 - fight your 2nd oponent
-    } else if(stage===5) {
-        fight();
+    // //stage 5 - fight your 2nd oponent
+    // } else if(stage===5) {
+    //     fight();
     
-    //stage 6 - pick your 3rd oponent
-    } else if(stage===6) {
-        selectYourOpponent();
+    // //stage 6 - pick your 3rd oponent
+    // } else if(stage===6) {
+    //     selectYourOpponent();
 
-    //stage 7 - fight your 3rd oponent
-    } else if(stage===7) {
-        fight();
-    }
+    // //stage 7 - fight your 3rd oponent
+    // } else if(stage===7) {
+    //     fight();
+    // }
 
 }
 
@@ -261,16 +268,24 @@ function drawTheCharacters() {
     arrayOfCharactersNames.forEach(function(character){
         if(debug){console.log(character);}
         
+        var name = character;
+        var hp = gameMortalKombat.characters[character].HP;
+        var attackPower = gameMortalKombat.characters[character].attackPower;
+        var counterAttackPower = gameMortalKombat.characters[character].counterAttackPower;
+        
         //create a "card" for each character
         //the card will have an image, name and have a copy of the HP, Attack, Counter Attack, etc
         var card = $("<div>");
         card.addClass("characters " + character);
         card.attr({
-            "id": character
+            "id": character,
+            "name": name,
+            "hp": hp,
+            "attackPower": attackPower,
+            "counterAttackPower": counterAttackPower
         });
 
         //add an img and append it to the card
-        var name = character;
         var image = $("<img>");
         var imageSrc = `./assets/images/${name}.jpg`
         if(debug){console.log(imageSrc);}
