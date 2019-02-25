@@ -2,14 +2,10 @@
     margin: 0 auto;
     width: 960px;
     height: 600px;
-    
     background: url("../images/mortal-combat.jpg") no-repeat; 
-    /* background-size: contain; */
-    
     display: flex;
     flex-direction: column;
 }
-
 .div_speaker {
     display: flex;
     flex-direction: row-reverse;
@@ -24,59 +20,57 @@
     background-size: contain;
     background-color: rgb(34, 17, 17);
 }
-
 .speaker:hover {
     cursor: pointer;
     opacity: 0.8;
 }
-
 .arena_1{
     margin: 0 30px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-   /* border: 1px solid red; */
 }
-
-/* stage 0 */
 .arena_0 {
     margin: 50px 0;
     display: flex;
-    /* flex-direction: column; */
-    /* border: 1px solid red; */
     justify-content: space-around;
 }
-
 .characters:hover {
     cursor: pointer;
 }
-
 .hero {
     position: absolute;
     top: 220px;
     left: 270px;
 }
-
 .opponent {
     position: absolute;
     top: 220px;
-    left: 600px;
+    left: 580px;
 }
-
+.opponent-flip {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
 .white {
     color: white;
 }
-
 .image {
     width: 150px;
     height: 150px;
     border: 1px solid red;
     color: white;
 }
-
 .big {
     font-size: 70px;
     color: white;
     line-height: 7rem;
     text-align: center;
+}
+.hidden {
+    display: none;
 }
