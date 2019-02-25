@@ -12,7 +12,7 @@
     flex-direction: row-reverse;
 }
 
-div {
+div {                           /* Make the elements unselectable */
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
@@ -51,12 +51,12 @@ div {
 .hero {
     position: absolute;
     top: 220px;
-    left: 270px;
+    left: 250px;
 }
 .opponent {
     position: absolute;
     top: 220px;
-    left: 550px;
+    left: 570px;
 }
 .opponent-flip {
     -moz-transform: scaleX(-1);
@@ -66,18 +66,23 @@ div {
     filter: FlipH;
     -ms-filter: "FlipH";
 }
-.white {
-    color: white;
+.card {
+    border: 1px solid rgb(54, 31, 31);
+}
+.card-caption{
+    font-size: 20px;
+    color: rgb(150, 141, 141);
+    display: flex;
+    justify-content: space-between;
 }
 .image {
     width: 150px;
     height: 150px;
-    border: 1px solid red;
     color: white;
 }
 .big {
     font-size: 70px;
-    color: white;
+    color: rgb(150, 141, 141);
     line-height: 7rem;
     text-align: center;
 }
@@ -91,7 +96,7 @@ div {
     background-color: red;
     position: absolute;
     top: 275px;
-    left: 420px;
+    left: 423px;
     border-radius: 20px;
     outline: none;
 

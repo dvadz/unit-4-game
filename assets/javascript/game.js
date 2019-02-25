@@ -163,7 +163,7 @@ function kombat() {
         } else {
             $("#instruction2").removeClass("hidden");
         }
-    //You lost      
+    //You lost         
     } else if (YourHP < 0) {
         if(debug){console.log("YOU LOST");}
         //set some flag
@@ -215,7 +215,7 @@ function drawTheCharacters() {
         //create a "card" for each character
         //the card will have an image, name and have a copy of the HP, Attack, Counter Attack, etc
         var card = $("<div>");
-        card.addClass("characters " + character);
+        card.addClass("characters card " + character);
         card.attr({
             "id": character,
             "name": name,
@@ -235,10 +235,16 @@ function drawTheCharacters() {
         image.addClass("image");
         card.append(image);
 
-        //this will show the name of the character
-        var title = $("<h3 class='white'>").text(character);
-        card.append(title);
+        //this will show the name and HP
+        // <div><h3>Name<span>HP</span></h3></div>
+        var caption = $("<div>").addClass('card-caption');
+        var displayName = $("<span>").text(character); 
+        var displayHP = $("<span id = 'displayHP'></span>").text(hp);
+        caption.append(displayName);
+        caption.append(displayHP);
+        card.append(caption);
 
+        //append the 'card' to the arena div
         $("#arena").append(card);
     });
 }
