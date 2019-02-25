@@ -11,14 +11,12 @@
     display: flex;
     flex-direction: row-reverse;
 }
-
 div {                           /* Make the elements unselectable */
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
     user-select: none;          /* Likely future */      
 }
-
 .speaker {
     width: 40px;
     height: 40px;
@@ -89,7 +87,6 @@ div {                           /* Make the elements unselectable */
 .hidden {
     display: none;
 }
-
 #fight {
     font-size: 40px;
     line-height: 60px;
@@ -99,10 +96,13 @@ div {                           /* Make the elements unselectable */
     left: 423px;
     border-radius: 20px;
     outline: none;
-
 }
-
 #fight:hover {
     cursor: pointer;
     outline: none;
+}
+.gameover {
+    position: absolute;
+    top: 230px;
+    left: 415px;
 }

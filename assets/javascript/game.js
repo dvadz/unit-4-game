@@ -75,6 +75,13 @@ $(document).ready(function(){
     });
 
     $(".characters").on("click", function(){
+
+        if(gameMortalKombat.gameOver) {
+            //make a defeated shout
+
+            return false;
+        }
+
         //get the name of the character and save it
         var character = this.id;
         if(debug){console.log("EVENT .characters: ",character);}
@@ -136,11 +143,14 @@ function kombat() {
     //reduce the opponent's HP by (YourAttackPower * #strikes)
     var totalAttackPower = parseInt(YourAttackPower) * parseInt(gameMortalKombat.numberOfStrikes);
     VillainHP = parseInt(VillainHP) - parseInt(totalAttackPower);
-    $(`#${villain}`).attr("hp", VillainHP)
+    //check if negative, if so, set to zero
+    VillainHP = (VillainHP < 0) ? 0 : VillainHP;
+    $(`#${villain}`).attr("hp", VillainHP);
     $(`#${villain} span#displayHP`).text(VillainHP);
 
     //reduce the hero's HP by the villain's CounterAttackPower alone
     YourHP = parseInt(YourHP) - parseInt(VillainCounterAttackPower);
+    YourHP = (YourHP < 0) ? 0 : YourHP;
     $("#" + you).attr("hp", YourHP);
     $(`#${you} span#displayHP`).text(YourHP);
 
@@ -155,25 +165,28 @@ function kombat() {
         gameMortalKombat.hasSelectedOpponent = false;
         $("#fight").addClass("hidden");
         
-        //increment the numberof wins then check if all 3 opponents have been defeated
+        //increment the number of wins then check if all 3 opponents have been defeated
         gameMortalKombat.numberOfWins++;
         if(gameMortalKombat.numberOfWins===3){
             gameMortalKombat.gameOver = true;
             console.log("CONGRATULATIONS YOU DEFEATED ALL ENEMIES!");
             //play music
+            $(".hero").removeClass("characters hero").addClass("gameover");
+            $("#victory").removeClass("hidden");
             return false;
         } else {
             //display instruction to pick another opponent
             $("#instruction2").removeClass("hidden");
         }
     //You lost         
-    } else if (YourHP < 0) {
+    } else if (YourHP===0) {
         if(debug){console.log("YOU LOST");}
-        //set some flagß
         gameMortalKombat.gameOver = true;
+        buryTheDead();
         $("#fight").addClass("hidden");
-
-
+        $(".hero").removeClass("characters hero").addClass("gameover");
+        //diplay message that you lost
+        $("#defeat").removeClass("hidden");
     }
 }
 
