@@ -48,6 +48,13 @@ var gameMortalKombat = {
 
 var sounds = {
      themeSong : new Audio("./assets/sounds/Mortal_Kombat_theme.mp3")
+     ,fatal: new Audio("./assets/sounds/fatality_scream.mp3")
+     ,round :[
+        new Audio("./assets/sounds/round1.mp3")
+        ,new Audio("./assets/sounds/round2.mp3")
+        ,new Audio("./assets/sounds/round3.mp3")
+     ]
+     ,fight: new Audio("./assets/sounds/fight.mp3")
      ,isthemeSongPlaying : false
      ,toggleThemeSong: function() {
         if(this.isthemeSongPlaying) {
@@ -106,6 +113,7 @@ $(document).ready(function(){
             selectYourOpponent(character);
             $("#instruction2").addClass("hidden");
             $("#fight").removeClass("hidden");
+            playFightSound();
 
         } else {
             //error?
@@ -119,6 +127,14 @@ $(document).ready(function(){
     });
 
 });
+
+function playFightSound() {
+    sounds.round[gameMortalKombat.numberOfWins].play();
+    var round_fight = setTimeout(function(){
+        sounds.fight.play();
+    },2000); 
+
+}
 
 function kombat() {
     'use strict'
@@ -216,6 +232,7 @@ function selectYourOpponent(character) {
 
 function buryTheDead() {
     $("#" + gameMortalKombat.chosenOpponent).hide();
+    sounds.fatal.play();
 }
 
 function drawTheCharacters() {

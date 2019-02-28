@@ -7,7 +7,7 @@
     flex-direction: column;
     position: relative;
 }
-.div_speaker {
+.div_messages_speaker {
     display: flex;
     flex-direction: row-reverse;
 }
@@ -83,6 +83,8 @@ div {                           /* Make the elements unselectable */
     color: rgb(150, 141, 141);
     line-height: 7rem;
     text-align: center;
+    width: 100%;
+    position: absolute;
 }
 .hidden {
     display: none;
