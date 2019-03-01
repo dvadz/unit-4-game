@@ -26,6 +26,7 @@ div {                           /* Make the elements unselectable */
     background: url("../images/white_speaker.png") no-repeat;
     background-size: contain;
     background-color: rgb(34, 17, 17);
+    z-index: 10;
 }
 .speaker:hover {
     cursor: pointer;
@@ -42,10 +43,10 @@ div {                           /* Make the elements unselectable */
     display: flex;
     justify-content: space-around;
 }
-.characters:hover {
+/* .characters:hover {
     cursor: pointer;
     outline: none;
-}
+} */
 .hero {
     position: absolute;
     top: 220px;
@@ -77,6 +78,8 @@ div {                           /* Make the elements unselectable */
     width: 150px;
     height: 150px;
     color: white;
+    cursor: pointer;
+    outline: none;
 }
 .big {
     font-size: 70px;
@@ -92,7 +95,7 @@ div {                           /* Make the elements unselectable */
 #fight {
     font-size: 40px;
     line-height: 60px;
-    background-color: red;
+    background-color: #9a0002;
     position: absolute;
     top: 275px;
     left: 423px;
@@ -107,4 +110,15 @@ div {                           /* Make the elements unselectable */
     position: absolute;
     top: 230px;
     left: 415px;
+}
+
+.play_again {
+    font-size: 20px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #9a0002;
+
+    position: absolute;
+    bottom: 100px;
+    left: 425px;
 }
