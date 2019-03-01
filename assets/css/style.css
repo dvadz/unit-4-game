@@ -43,10 +43,6 @@ div {                           /* Make the elements unselectable */
     display: flex;
     justify-content: space-around;
 }
-/* .characters:hover {
-    cursor: pointer;
-    outline: none;
-} */
 .hero {
     position: absolute;
     top: 220px;
