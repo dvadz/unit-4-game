@@ -1,5 +1,5 @@
 'use strict'
-var debug = true;
+var debug = false;
 
 function GameCharacter(name, hp, attackPower,counterAttackPower) {
     this.name = name;
