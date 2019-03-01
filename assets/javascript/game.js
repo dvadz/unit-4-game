@@ -1,13 +1,11 @@
 'use strict'
 var debug = true;
 
-function GameCharacter(name, attackPower,counterAttackPower) {
+function GameCharacter(name, hp, attackPower,counterAttackPower) {
     this.name = name;
-    this.HP = 150;
+    this.HP = hp;
     this.attackPower = attackPower;
     this.counterAttackPower = counterAttackPower;
-    this.hasDied = false;
-    this.chosenOne = false;
 }
 
 var gameMortalKombat = {
@@ -20,10 +18,10 @@ var gameMortalKombat = {
     ,hasSelectedOpponent  : false
     ,gameOver: false
     ,characters : {
-        "Johnny" : new GameCharacter("Johnny", 15, 16),
-        "Liu"    : new GameCharacter("Liu"   , 18, 18),
-        "Sonya"  : new GameCharacter("Sonya" , 12, 15),
-        "Shang"  : new GameCharacter("Shang" , 20, 25),
+        "Johnny" : new GameCharacter("Johnny", 140, 15, 19),
+        "Liu"    : new GameCharacter("Liu"   , 150, 18, 20),
+        "Sonya"  : new GameCharacter("Sonya" , 130, 12, 15),
+        "Shang"  : new GameCharacter("Shang" , 160, 19, 25),
     }
     ,init : function() {
         this.characterThatWasRecentlyClicked = "";
@@ -125,6 +123,8 @@ $(document).ready(function(){
             selectYourOpponent(character);
             $("#instruction2").addClass("hidden");
             $("#fight").removeClass("hidden");
+            //hide the characters
+            $(".sideline").addClass("hidden");
             playFightSound();
 
         } else {
@@ -209,7 +209,8 @@ function kombat() {
         buryTheDead();
         gameMortalKombat.hasSelectedOpponent = false;
         $("#fight").addClass("hidden");
-        
+        //show the characters
+        $(".sideline").removeClass("hidden");
         //increment the number of wins then check if all 3 opponents have been defeated
         gameMortalKombat.numberOfWins++;
         if(gameMortalKombat.numberOfWins===3){
@@ -244,7 +245,7 @@ function selectYourCharacter(character) {
     gameMortalKombat.chosenCharacter = character;
 
     //.hero class positions the character
-    $("#" + character).addClass("hero");
+    $("#" + character).addClass("hero").removeClass("sideline");
 }
 
 function moveCharactersToTheRightSide() {
@@ -259,7 +260,7 @@ function selectYourOpponent(character) {
 
     //move the selected opponent into position to fight and flip image horizontally
     var opp = "#" + character;
-    $(opp).addClass("opponent");
+    $(opp).addClass("opponent").removeClass("sideline");
     $(opp + " img").addClass("opponent-flip");  
 }
 
@@ -284,7 +285,7 @@ function drawTheCharacters() {
         //create a "card" for each character
         //the card will have an image, name and have a copy of the HP, Attack, Counter Attack, etc
         var card = $("<div>");
-        card.addClass("characters card " + character);
+        card.addClass("characters card sideline " + character);
         card.attr({
             "id": character,
             "name": name,
