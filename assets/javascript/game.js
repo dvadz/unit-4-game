@@ -25,6 +25,16 @@ var gameMortalKombat = {
         "Sonya"  : new GameCharacter("Sonya" , 12, 15),
         "Shang"  : new GameCharacter("Shang" , 20, 25),
     }
+    ,init : function() {
+        this.characterThatWasRecentlyClicked = "";
+        this.chosenCharacter = "";
+        this.chosenOpponent = "";
+        this.numberOfStrikes = 0;
+        this.numberOfWins = 0;
+        this.hasSelectedACharacter= false;
+        this.hasSelectedOpponent  = false;
+        this.gameOver= false;
+    }
     ,getNameOfCharacters: function() {
         return this.characters;
     }
@@ -72,7 +82,7 @@ var sounds = {
 };
 
 $(document).ready(function(){
-    //sounds.toggleThemeSong();
+    sounds.toggleThemeSong();
 
     drawTheCharacters();
 
@@ -81,17 +91,19 @@ $(document).ready(function(){
         if(debug){console.log("toggle song");}
     });
 
-    $(".characters").on("click", function(){
+    //CLICK ON THE CHARACTERS
+    $("#arena").on("click", function(event){
 
         if(gameMortalKombat.gameOver) {
             //make a defeated shout
-
             return false;
         }
 
         //get the name of the character and save it
-        var character = this.id;
-        if(debug){console.log("EVENT .characters: ",character);}
+        var character = event.target.alt;
+        if(debug){console.log("EVENT .characters: ",event);}
+        // if(debug){console.log("EVENT .characters: ",character);}
+ 
         gameMortalKombat.setWhoWasClicked(character);
 
         //player selects a character
@@ -121,9 +133,27 @@ $(document).ready(function(){
         }
     });
 
+    //FIGHT BUTTON
     $("#fight").on("click", function(){
         if(debug){console.log("EVENT #fight: ");}
         kombat();
+    });
+
+    //PLAY AGAIN BUTTON
+    $(".play_again").on("click", function(){
+        if(debug){console.log("EVENT .play_again")}
+
+        //reset the arena 
+        $("#arena").empty().removeClass("arena_1").addClass("arena_0");
+        drawTheCharacters();
+        // reset variables in gameMortalKombat 
+        gameMortalKombat.init();
+        //hide the messages except for #1
+        $(".messages").addClass("hidden");
+        $("#instruction1").removeClass("hidden");
+        //hide all buttons
+        $(".buttons").addClass("hidden");
+
     });
 
 });
@@ -133,7 +163,6 @@ function playFightSound() {
     var round_fight = setTimeout(function(){
         sounds.fight.play();
     },2000); 
-
 }
 
 function kombat() {
@@ -185,10 +214,12 @@ function kombat() {
         gameMortalKombat.numberOfWins++;
         if(gameMortalKombat.numberOfWins===3){
             gameMortalKombat.gameOver = true;
-            console.log("CONGRATULATIONS YOU DEFEATED ALL ENEMIES!");
+            if(debug) {console.log("YOU WON!")};
             //play music
             $(".hero").removeClass("characters hero").addClass("gameover");
             $("#victory").removeClass("hidden");
+            //show 'Play Again'
+            $(".play_again").removeClass("hidden");
             return false;
         } else {
             //display instruction to pick another opponent
@@ -203,6 +234,8 @@ function kombat() {
         $(".hero").removeClass("characters hero").addClass("gameover");
         //diplay message that you lost
         $("#defeat").removeClass("hidden");
+        //show 'Play Again'
+        $(".play_again").removeClass("hidden");
     }
 }
 
