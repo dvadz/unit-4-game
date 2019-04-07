@@ -90,7 +90,8 @@ $(document).ready(function(){
     });
 
     //CLICK ON THE CHARACTERS
-    $("#arena").on("click", function(event){
+    // $("#arena").on("click", function(event){
+    $(document).on("click", ".characters", function(event){
 
         if(gameMortalKombat.gameOver) {
             //make a defeated shout
